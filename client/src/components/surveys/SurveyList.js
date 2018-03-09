@@ -1,8 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchSurveys } from '../../actions';
+import { fetchSurveys, deleteSurvey } from '../../actions';
 
 class SurveyList extends Component {
+    constructor(props, context) {
+        super(props, context);
+    
+        this.onClickDelete = this.onClickDelete.bind(this);
+    }
+
+    onClickDelete(surveyId) {
+        console.log('delete clicked');
+        this.props.deleteSurvey({ surveyId });
+    }
+
     componentDidMount() {
         this.props.fetchSurveys();
     }
@@ -13,6 +24,7 @@ class SurveyList extends Component {
                 <div className="card darken-1" key={ survey._id }>
                     <div className="card-content">
                         <span className="card-title">{ survey.title }</span>
+                        <a className="btn-floating halfway-fab waves-effect waves-light red" onClick={ () => this.onClickDelete(survey._id) }><i className="material-icons">delete</i></a>
                         <p>{ survey.body }</p>
                         <p className="right">Sent On: { new Date(survey.dateSent).toLocaleDateString() }</p>
                     </div>
@@ -37,4 +49,4 @@ function mapStateToProps({ surveys }) {
     return { surveys };
 }
 
-export default connect(mapStateToProps, { fetchSurveys })(SurveyList);
+export default connect(mapStateToProps, { fetchSurveys, deleteSurvey })(SurveyList);

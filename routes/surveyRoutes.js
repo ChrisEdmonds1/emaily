@@ -76,4 +76,18 @@ module.exports = app => {
             res.status(422).send(err);
         }
     });
+
+    app.post('/api/surveys/delete', requireLogin, async (req, res) => {
+        console.log('req.body', req.body)
+        try {
+            await Survey.deleteOne({ _id: req.body.surveyId }, (err) => {
+                if (err) {
+                    message.type = 'error';
+                }
+            });
+        } catch (err) {
+            res.status(422).send(err);
+        }
+        res.send({});
+    });
 };
